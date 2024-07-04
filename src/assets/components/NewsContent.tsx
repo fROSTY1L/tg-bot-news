@@ -4,7 +4,7 @@ import { Card } from 'antd';
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import Meta from 'antd/es/card/Meta';
+
 
 
 interface ArticleSource {
@@ -35,7 +35,7 @@ const NewsContent = () => {
     const topicState = useSelector((state: RootState) => state.topic.value)
     useEffect(() => {
     const fetchData = async () => {
-      const url = 'https://newsapi.org/v2/top-headlines?country='+ topicState +'&apiKey=5abc57ec64b740c59ac23c8cdad22dd2';
+      const url = 'https://newsapi.org/v2/top-headlines?country=' + topicState +'&apiKey=5abc57ec64b740c59ac23c8cdad22dd2';
       try {
         const response = await fetch(url);
         if (!response.ok) {
