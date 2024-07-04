@@ -5,7 +5,7 @@ interface TopicState {
 }
 
 const initialState: TopicState = {
-    value: ''
+    value: 'ru'
 }
 
 const TopicSlice = createSlice({
