@@ -1,0 +1,10 @@
+{
+  "files": {
+    "main.js": "/tg-bot-news/static/js/main.bf8f1d53.js",
+    "index.html": "/tg-bot-news/index.html",
+    "main.bf8f1d53.js.map": "/tg-bot-news/static/js/main.bf8f1d53.js.map"
+  },
+  "entrypoints": [
+    "static/js/main.bf8f1d53.js"
+  ]
+}
