@@ -55,13 +55,9 @@ const NewsContent = () => {
         {newsData && (
         <NewsCardWrap>
           {newsData.articles.map((article) => (
-            <Card
-            hoverable
-            style={{ width: '80vw', marginBottom: '10px' }}
-            cover={<img alt={article.title} src={article.urlToImage} />}
-          >
-            <Meta title={article.title} description={article.description} />
-          </Card>
+              <Card title={article.title} bordered={false} style={{ width: '90vw' }}>
+              <a href={article.url}>Читать</a>
+            </Card>
           ))}
         </NewsCardWrap>
       )}
