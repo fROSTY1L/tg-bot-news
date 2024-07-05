@@ -4,81 +4,122 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 
-interface ArticleSource {
-  id: string | null;
-  name: string;
+interface SentimentStats {
+    positive: number;
+    neutral: number;
+    negative: number;
+  }
+  
+interface ArticleResult {
+    article_id: string;
+    title: string | any;
+    link: string;
+    keywords: string[];
+    creator: string[];
+    video_url: string | null;
+    description: string;
+    content: string;
+    pubDate: string;
+    image_url: string;
+    source_id: string;
+    source_priority: number;
+    source_url: string;
+    source_icon: string | null;
+    language: string;
+    country: string[];
+    category: string[];
+    ai_tag: string[];
+    ai_region: string | null;
+    ai_org: string | null;
+    sentiment: string;
+    sentiment_stats: SentimentStats;
 }
 
-interface Article {
-  source: ArticleSource;
-  author: string;
-  title: string;
-  description: string;
-  url: string;
-  urlToImage: string;
-  publishedAt: string;
-  content: string;
+interface NewsData {
+    status: string;
+    totalResults: number;
+    results: ArticleResult[];
 }
 
-interface NewsApiResponse {
-  status: string;
-  totalResults: number;
-  articles: Article[];
-}
-
-const NewsContent = () => {
-  const [newsData, setNewsData] = useState<Article[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [page, setPage] = useState(1);
-  const [visibleCount, setVisibleCount] = useState(5); // Начальное количество видимых карточек
-
-  const topicState = useSelector((state: RootState) => state.topic.value);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      const url = `https://newsapi.org/v2/top-headlines?country=${topicState}&apiKey=5abc57ec64b740c59ac23c8cdad22dd2&page=${page}`;
-      try {
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+  
+  const NewsContent = () => {
+    const [newsData, setNewsData] = useState<ArticleResult[]>([]);
+    const [loading, setLoading] = useState(false);
+    const [hasMore, setHasMore] = useState(true); // 
+  
+    const apiKey = 'pub_47976326dd12d3f1ba15d6f77385b33750726';
+    const topicState = useSelector((state: RootState) => state.topic.value);
+  
+    useEffect(() => {
+        const fetchData = async () => {
+          setLoading(true);
+          const url = `https://newsdata.io/api/1/latest?apikey=${apiKey}&country=${topicState}&language=ru`;
+          try {
+            const response = await fetch(url);
+            if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data: NewsData = await response.json();
+            setNewsData(data.results); 
+            setHasMore(data.results.length > 0); 
+            setLoading(false);
+          } catch (error) {
+            console.error('Ошибка при получении данных:', error);
+            setLoading(false);
+          }
+        };
+    
+        fetchData();
+      }, [topicState]);
+    
+      const loadMoreNews = async () => {
+        if (!hasMore) return; 
+      
+        setLoading(true);
+        const url = `https://newsdata.io/api/1/news?apikey=${apiKey}&country=${topicState}&language=ru`;
+      
+        try {
+          const response = await fetch(url);
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          const data: NewsData = await response.json();
+          const newArticles = data.results.filter(article => 
+            !newsData.some(existingArticle => existingArticle.article_id === article.article_id)
+          ); 
+      
+          if (newArticles.length === 0) {
+            setHasMore(false);
+          } else {
+            setNewsData(prevData => [...prevData, ...newArticles]); 
+          }
+        } catch (error) {
+          console.error('Ошибка при получении данных:', error);
+        } finally {
+          setLoading(false);
         }
-        const data: NewsApiResponse = await response.json();
-        setNewsData(prevData => [...prevData, ...data.articles]);
-        setLoading(false);
-      } catch (error) {
-        console.error('Ошибка при получении данных:', error);
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [topicState, page]);
-
-  const loadMoreNews = () => {
-    setVisibleCount(prevCount => prevCount + 5); // Загружаем ещё 5 карточек
-    if (visibleCount >= newsData.length) {
-      setPage(prevPage => prevPage + 1); // Если видимые карточки закончились, загружаем следующую страницу
-    }
+      };
+      
+    
+  
+    return (
+      <NewsWrap>
+        <NewsCardWrap>
+          {newsData.map((article, index) => (
+            <Card key={index} title={article.title} bordered={false} style={{ width: '90vw' }}>
+              <a href={article.link}>Читать</a>
+            </Card>
+          ))}
+        </NewsCardWrap>
+        {loading && <p>Загрузка...</p>}
+        {!loading && hasMore && ( // Отображаем кнопку только если есть новые посты
+          <Button onClick={loadMoreNews} type="primary" style={{ margin: '20px 0' }}>
+            Загрузить ещё
+          </Button>
+        )}
+      </NewsWrap>
+    );
   };
-
-  return (
-    <NewsWrap>
-      <NewsCardWrap>
-        {newsData.slice(0, visibleCount).map((article, index) => (
-          <Card key={index} title={article.title} bordered={false} style={{ width: '90vw' }}>
-            <a href={article.url}>Читать</a>
-          </Card>
-        ))}
-      </NewsCardWrap>
-      {loading && <p>Загрузка...</p>}
-      {!loading && (
-        <Button onClick={loadMoreNews} type="primary" style={{ margin: '20px 0' }}>
-          Загрузить ещё
-        </Button>
-      )}
-    </NewsWrap>
-  );
-};
-
-export default NewsContent;
+  
+  export default NewsContent;
+  
