@@ -2,6 +2,8 @@ import { Menu, MenuProps, Card } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setTopic } from '../../store/TopicReducer';
+import { Header } from 'antd/es/layout/layout';
+import UserInfo from './UserInfo';
 ;
 
 
@@ -23,7 +25,8 @@ const HeaderLayout = () => {
   };
 
   return (
-
+    <Header style={{ display: 'flex', alignItems: 'center' }}>
+      <UserInfo/>
         <Menu
           theme="dark"
           mode="horizontal"
@@ -32,6 +35,7 @@ const HeaderLayout = () => {
           style={{ flex: 1, width: '100vw'}}
           onClick={onClick}
         />
+        </Header>
 
   )
 }
