@@ -32,7 +32,7 @@ const HeaderLayout = () => {
           mode="horizontal"
           defaultSelectedKeys={['1']}
           items={items}
-          style={{ flex: 1, width: '100vw'}}
+          style={{ flex: 1}}
           onClick={onClick}
         />
         </Header>
