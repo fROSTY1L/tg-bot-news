@@ -25,7 +25,7 @@ const HeaderLayout = () => {
   };
 
   return (
-    <Header style={{ display: 'flex', alignItems: 'center' }}>
+    <Header style={{ display: 'flex', alignItems: 'center', width: '100vw'}}>
       <UserInfo/>
         <Menu
           theme="dark"

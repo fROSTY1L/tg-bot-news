@@ -22,7 +22,7 @@ const UserInfo = () => {
         open={open}
         onOpenChange={handleOpenChange}
         >
-        <Button type="primary">{username}</Button>
+        <Button type="primary">{username + '\n'}</Button>
         </Popover>
     );
     };
