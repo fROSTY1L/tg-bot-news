@@ -1,11 +1,13 @@
-import { Menu, MenuProps, Card } from 'antd';
+import { Menu, MenuProps, Typography} from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { setTopic } from '../../store/TopicReducer';
 import { Header } from 'antd/es/layout/layout';
 import UserInfo from './UserInfo';
+import { TitleHolder } from '../Styles/HeaderLayout.style';
 ;
 
+const { Title } = Typography;
 
 const themes = ['Россия', 'США', 'Германия', 'Корея', 'Китай']
 const keys = ['ru', 'us', 'gr', 'kr', 'ch']
@@ -25,17 +27,21 @@ const HeaderLayout = () => {
   };
 
   return (
-    <Header style={{ display: 'flex', alignItems: 'center', width: '100vw'}}>
-      <UserInfo/>
+      <>
+        <TitleHolder>
+          <Title style={{color: 'rgba: var(--tg-theme-text-color)'}}>Telegram News</Title>
+          <UserInfo/>
+        </TitleHolder>
         <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={['1']}
-          items={items}
-          style={{ flex: 1}}
-          onClick={onClick}
+        title='TelegramNews'
+        theme="dark"
+        mode="horizontal"
+        defaultSelectedKeys={['1']}
+        items={items}
+        style={{ flex: 1, position: 'sticky', top: 0, zIndex: 2}}
+        onClick={onClick}
         />
-        </Header>
+        </>
 
   )
 }
