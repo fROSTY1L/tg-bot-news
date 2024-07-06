@@ -104,16 +104,18 @@ interface NewsData {
   
     return (
       <NewsWrap>
-        <NewsCardWrap>
+        
           {newsData.map((article, index) => (
-            <Card key={index} title={article.title} bordered={false} style={{ width: '90vw' }}>
-              <a href={article.link}>Читать</a>
-            </Card>
+            <NewsCardWrap>
+              <Card key={index} title={article.title} bordered={false}>
+                <a href={article.link}>Читать</a>
+              </Card>
+            </NewsCardWrap>
           ))}
-        </NewsCardWrap>
+        
         {loading && <p>Загрузка...</p>}
-        {!loading && hasMore && ( // Отображаем кнопку только если есть новые посты
-          <Button onClick={loadMoreNews} type="primary" style={{ margin: '20px 0' }}>
+        {!loading && hasMore && (
+          <Button onClick={loadMoreNews} type="primary" style={{width: '90vw'}}>
             Загрузить ещё
           </Button>
         )}
